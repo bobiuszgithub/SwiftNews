@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+// Model for the response from the API
+struct NewsResponse: Codable {
+    let articles: [Article]  // List of articles
+}

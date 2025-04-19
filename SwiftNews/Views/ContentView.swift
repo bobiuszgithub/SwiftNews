@@ -8,17 +8,37 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject private var viewModel = NewsViewModel()
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationView {
+            VStack {
+                if let error = viewModel.errorMessage {
+                    Text("Error: \(error)")
+                        .foregroundColor(.red)
+                        .padding()
+                } else {
+                    List(viewModel.articles) { article in
+                        VStack(alignment: .leading) {
+                            Text(article.title)
+                                .font(.headline)
+                            Text(article.description ?? "No description")
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
+                        }
+                    }
+                }
+            }
+            .navigationTitle("Top Headlines")
+            .onAppear {
+                viewModel.fetchTopHeadlines()
+            }
         }
-        .padding()
     }
 }
 
-#Preview {
-    ContentView()
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
 }
